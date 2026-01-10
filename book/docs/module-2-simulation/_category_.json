@@ -1,0 +1,8 @@
+{
+  "label": "Module 2: Robot Simulation",
+  "position": 3,
+  "link": {
+    "type": "generated-index",
+    "description": "Master robot simulation with Gazebo and prepare for real-world deployment."
+  }
+}

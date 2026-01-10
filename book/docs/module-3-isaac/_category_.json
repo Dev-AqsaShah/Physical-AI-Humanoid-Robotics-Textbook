@@ -1,0 +1,8 @@
+{
+  "label": "Module 3: NVIDIA Isaac & Navigation",
+  "position": 4,
+  "link": {
+    "type": "generated-index",
+    "description": "Leverage GPU-accelerated simulation and production-grade navigation with Nav2."
+  }
+}

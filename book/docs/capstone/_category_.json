@@ -1,0 +1,8 @@
+{
+  "label": "Capstone: Voice-Controlled Assistant",
+  "position": 6,
+  "link": {
+    "type": "generated-index",
+    "description": "Build a complete voice-controlled humanoid robot assistant."
+  }
+}

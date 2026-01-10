@@ -1,0 +1,18 @@
+<svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#00d4ff" />
+      <stop offset="100%" stop-color="#8b5cf6" />
+    </linearGradient>
+  </defs>
+  <!-- Hexagonal shape representing AI/tech -->
+  <path d="M16 2L28 9V23L16 30L4 23V9L16 2Z" stroke="url(#logoGradient)" stroke-width="2" fill="none"/>
+  <!-- Inner robot head silhouette -->
+  <circle cx="16" cy="13" r="5" stroke="url(#logoGradient)" stroke-width="1.5" fill="none"/>
+  <rect x="12" y="18" width="8" height="6" rx="1" stroke="url(#logoGradient)" stroke-width="1.5" fill="none"/>
+  <!-- Eyes -->
+  <circle cx="14" cy="12" r="1" fill="#00d4ff"/>
+  <circle cx="18" cy="12" r="1" fill="#00d4ff"/>
+  <!-- Connection point -->
+  <circle cx="16" cy="5" r="1.5" fill="url(#logoGradient)"/>
+</svg>
