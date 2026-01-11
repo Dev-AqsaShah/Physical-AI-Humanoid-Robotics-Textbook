@@ -21,7 +21,7 @@ const config = {
 
   // Set the production url of your site here
   // TODO: Update with actual GitHub Pages URL
-  url: 'https://username.github.io',
+  url: 'https://physical-ai-humanoid-robotics-textb-two-ecru.vercel.app',
   // Set the /<baseUrl>/ pathname under which your site is served
   // For GitHub pages deployment, it is often '/<projectName>/'
   baseUrl: '/',
