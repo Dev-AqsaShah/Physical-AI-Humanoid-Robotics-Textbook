@@ -1,0 +1,40 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+.venv/
+venv/
+ENV/
+env/
+*.egg-info/
+dist/
+build/
+
+# Environment variables
+.env
+*.env.local
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Node (for Docusaurus book)
+node_modules/
+
+# Logs
+*.log
+
+# Temp files
+tmpclaude-*
+nul
+
+# Claude Code local settings (contains API keys)
+.claude/settings.local.json
