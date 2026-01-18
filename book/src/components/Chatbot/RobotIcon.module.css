@@ -1,0 +1,153 @@
+.robotContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.robotSvg {
+  width: 100%;
+  height: 100%;
+}
+
+/* =============================================================================
+   Iris/Pupil Animation - Smooth, Human-like Eye Movement
+
+   The animation simulates natural eye movement patterns:
+   - Look center → look right → pause → look center → look left → pause → repeat
+   - Uses ease-in-out for organic acceleration/deceleration
+   - Includes micro-pauses to simulate focus points
+   ============================================================================= */
+
+.irisGroup {
+  animation: humanEyeMovement 6s ease-in-out infinite;
+  transform-origin: center;
+}
+
+@keyframes humanEyeMovement {
+  0% {
+    transform: translateX(0);
+  }
+  /* Settle at center */
+  8% {
+    transform: translateX(0);
+  }
+  /* Smooth glance to the right */
+  20% {
+    transform: translateX(3px);
+  }
+  /* Hold gaze briefly - observing */
+  32% {
+    transform: translateX(3px);
+  }
+  /* Return to center smoothly */
+  44% {
+    transform: translateX(0);
+  }
+  /* Brief pause at center */
+  52% {
+    transform: translateX(0);
+  }
+  /* Smooth glance to the left */
+  64% {
+    transform: translateX(-3px);
+  }
+  /* Hold gaze briefly - observing */
+  76% {
+    transform: translateX(-3px);
+  }
+  /* Return to center */
+  88% {
+    transform: translateX(0);
+  }
+  /* Rest at center */
+  100% {
+    transform: translateX(0);
+  }
+}
+
+/* Subtle eye "life" - very slight continuous micro-movement */
+.eyeGroup {
+  animation: eyeLife 8s ease-in-out infinite;
+}
+
+@keyframes eyeLife {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  25% {
+    transform: translateY(0.3px);
+  }
+  50% {
+    transform: translateY(0);
+  }
+  75% {
+    transform: translateY(-0.3px);
+  }
+}
+
+/* Antenna light - gentle pulsing */
+.antennaLight {
+  animation: antennaPulse 3s ease-in-out infinite;
+}
+
+@keyframes antennaPulse {
+  0%, 100% {
+    opacity: 1;
+    filter: url(#softGlow) drop-shadow(0 0 3px #00f5ff);
+  }
+  50% {
+    opacity: 0.7;
+    filter: url(#softGlow) drop-shadow(0 0 6px #00f5ff);
+  }
+}
+
+/* Speaker lines - subtle wave animation */
+.speakerLines {
+  animation: speakerWave 2s ease-in-out infinite;
+}
+
+@keyframes speakerWave {
+  0%, 100% {
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 0.8;
+  }
+}
+
+/* Speaker individual line animations for wave effect */
+.speakerLines line:nth-child(1) {
+  animation: lineWave 2s ease-in-out infinite;
+  animation-delay: 0s;
+}
+
+.speakerLines line:nth-child(2) {
+  animation: lineWave 2s ease-in-out infinite;
+  animation-delay: 0.1s;
+}
+
+.speakerLines line:nth-child(3) {
+  animation: lineWave 2s ease-in-out infinite;
+  animation-delay: 0.2s;
+}
+
+.speakerLines line:nth-child(4) {
+  animation: lineWave 2s ease-in-out infinite;
+  animation-delay: 0.1s;
+}
+
+.speakerLines line:nth-child(5) {
+  animation: lineWave 2s ease-in-out infinite;
+  animation-delay: 0s;
+}
+
+@keyframes lineWave {
+  0%, 100% {
+    opacity: 0.4;
+    transform: scaleY(0.8);
+  }
+  50% {
+    opacity: 0.9;
+    transform: scaleY(1);
+  }
+}
