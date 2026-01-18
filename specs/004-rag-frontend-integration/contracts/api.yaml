@@ -1,0 +1,263 @@
+openapi: 3.1.0
+info:
+  title: RAG Agent API
+  description: API for querying the Physical AI & Humanoid Robotics textbook assistant
+  version: 1.0.0
+  contact:
+    name: RAG Pipeline Team
+
+servers:
+  - url: http://localhost:8000
+    description: Local development server
+
+paths:
+  /ask:
+    post:
+      summary: Ask a question about the textbook
+      description: |
+        Submit a question and optionally selected text context.
+        Returns a grounded answer with source citations.
+      operationId: askQuestion
+      tags:
+        - Query
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/QueryRequest'
+            examples:
+              simple_question:
+                summary: Simple question
+                value:
+                  question: "What is ROS 2?"
+              with_context:
+                summary: Question with selected text
+                value:
+                  question: "What does this mean?"
+                  selected_text: "ROS 2 uses DDS for communication"
+                  top_k: 5
+                  threshold: 0.5
+      responses:
+        '200':
+          description: Successful response with answer
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QueryResponse'
+              examples:
+                success:
+                  summary: Successful answer
+                  value:
+                    answer: "ROS 2 (Robot Operating System 2) is a flexible framework for writing robot software..."
+                    sources:
+                      - chapter: "Module 1: ROS 2"
+                        section: "Introduction to ROS 2"
+                        url: "/docs/module-1-ros2/intro"
+                        relevance_score: 0.89
+                    has_relevant_context: true
+                    timing:
+                      retrieval_ms: 245.5
+                      generation_ms: 3200.0
+                      total_ms: 3445.5
+                no_context:
+                  summary: No relevant context found
+                  value:
+                    answer: "I couldn't find relevant information about that topic..."
+                    sources: []
+                    has_relevant_context: false
+                    timing:
+                      retrieval_ms: 180.0
+                      generation_ms: 0.0
+                      total_ms: 180.0
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                empty_question:
+                  summary: Empty question
+                  value:
+                    error: "validation_error"
+                    message: "Question cannot be empty"
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                agent_error:
+                  summary: Agent processing failed
+                  value:
+                    error: "agent_error"
+                    message: "Failed to process query"
+                    detail: "OpenRouter API unavailable"
+
+  /health:
+    get:
+      summary: Health check
+      description: Check if the API and agent are ready
+      operationId: healthCheck
+      tags:
+        - System
+      responses:
+        '200':
+          description: Service is healthy
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthResponse'
+              examples:
+                healthy:
+                  summary: Healthy status
+                  value:
+                    status: "healthy"
+                    agent_ready: true
+
+components:
+  schemas:
+    QueryRequest:
+      type: object
+      required:
+        - question
+      properties:
+        question:
+          type: string
+          minLength: 1
+          maxLength: 2000
+          description: The question to ask about the textbook
+          example: "What is ROS 2?"
+        selected_text:
+          type: string
+          maxLength: 5000
+          description: Optional text selected by user for additional context
+          example: "ROS 2 uses DDS for communication between nodes"
+        top_k:
+          type: integer
+          minimum: 1
+          maximum: 20
+          default: 5
+          description: Number of text chunks to retrieve
+        threshold:
+          type: number
+          format: float
+          minimum: 0.0
+          maximum: 1.0
+          default: 0.5
+          description: Minimum relevance score for retrieved chunks
+
+    QueryResponse:
+      type: object
+      required:
+        - answer
+        - sources
+        - has_relevant_context
+        - timing
+      properties:
+        answer:
+          type: string
+          description: The generated answer text
+        sources:
+          type: array
+          items:
+            $ref: '#/components/schemas/SourceCitation'
+          description: List of source citations used in the answer
+        has_relevant_context:
+          type: boolean
+          description: Whether relevant context was found in the textbook
+        timing:
+          $ref: '#/components/schemas/TimingInfo'
+
+    SourceCitation:
+      type: object
+      required:
+        - chapter
+        - section
+        - url
+        - relevance_score
+      properties:
+        chapter:
+          type: string
+          description: Chapter identifier
+          example: "Module 1: ROS 2"
+        section:
+          type: string
+          description: Section title
+          example: "Introduction to ROS 2"
+        url:
+          type: string
+          description: URL to the section in the book
+          example: "/docs/module-1-ros2/intro"
+        relevance_score:
+          type: number
+          format: float
+          minimum: 0.0
+          maximum: 1.0
+          description: Similarity score
+          example: 0.89
+
+    TimingInfo:
+      type: object
+      required:
+        - retrieval_ms
+        - generation_ms
+        - total_ms
+      properties:
+        retrieval_ms:
+          type: number
+          format: float
+          description: Time spent on vector search in milliseconds
+        generation_ms:
+          type: number
+          format: float
+          description: Time spent on LLM generation in milliseconds
+        total_ms:
+          type: number
+          format: float
+          description: Total request time in milliseconds
+
+    ErrorResponse:
+      type: object
+      required:
+        - error
+        - message
+      properties:
+        error:
+          type: string
+          enum:
+            - validation_error
+            - agent_error
+            - timeout_error
+            - internal_error
+          description: Error type identifier
+        message:
+          type: string
+          description: Human-readable error message
+        detail:
+          type: string
+          description: Additional error details
+
+    HealthResponse:
+      type: object
+      required:
+        - status
+        - agent_ready
+      properties:
+        status:
+          type: string
+          enum:
+            - healthy
+            - unhealthy
+          description: Overall service status
+        agent_ready:
+          type: boolean
+          description: Whether the RAG agent is initialized and ready
+
+tags:
+  - name: Query
+    description: Question answering endpoints
+  - name: System
+    description: System health and status endpoints
